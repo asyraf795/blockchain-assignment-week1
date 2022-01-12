@@ -1,46 +1,28 @@
 version: '3.8'
 services:
-  simple-exercise:
-    container_name: c1
+  simple-exercise-app:
+    container_name: simple-exercise-app
     ports: 
-      - 9393:8485
+      - 9944:8485
     build: 
       context: ./
       dockerfile: ./Dockerfile
-    image: simple-exercise
+    image: asyraf795/simple-ex
     restart: unless-stopped
     networks:
-      - fabricnet
+      - simple-exe-tier
     volumes:
       - /usr/src/app
       - /usr/src/app/node_modules
     environment:
       - NODE_ENV=development
     depends_on:
-      - fabric-data      
-  simple-exercise2:
-    container_name: c2
-    ports: 
-      - 9393:8485
-    build: 
-      context: ./
-      dockerfile: ./Dockerfile
-    image: simple-exercise
-    restart: unless-stopped
-    networks:
-      - fabricnet
-    volumes:
-      - /usr/src/app
-      - /usr/src/app/node_modules
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - fabric-data
-  fabric-data:
+      - simple-exe-data      
+  simple-exe-data:
     image: mongo
     ports: 
       - "27017:27017"
-    container_name: fabric-data 
+    container_name: simple-exe-data 
     volumes:
         - ./mongodb:/data
     environment:
@@ -48,7 +30,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD
       - MONGODB_mongo
     networks:
-      - fabricnet
+      - simple-exe-tier
 networks:
-  fabricnet:
+  simple-exe-tier:
     driver: bridge
