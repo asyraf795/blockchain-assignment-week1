@@ -1,34 +1,28 @@
 version: '3.8'
 services:
-  simple-exercise-app:
+  simple_server:
     container_name: simple-exercise-app
     ports: 
       - 9944:8485
     build: 
       context: ./
       dockerfile: ./Dockerfile
-    image: asyraf795/simple-ex
+    image: asyraf795/simple_server
     restart: unless-stopped
     networks:
       - simple-exe-tier
-    volumes:
-      - /usr/src/app
-      - /usr/src/app/node_modules
     environment:
       - NODE_ENV=development
     depends_on:
-      - simple-exe-data      
-  simple-exe-data:
+      - mongo      
+  mongo:
     image: mongo
-    ports: 
+    ports:
       - "27017:27017"
-    container_name: simple-exe-data 
     volumes:
         - ./mongodb:/data
-    environment:
-      - MONGO_INDITDB_ROOT_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD
-      - MONGODB_mongo
+    # env_file:
+    #   - .env
     networks:
       - simple-exe-tier
 networks:
